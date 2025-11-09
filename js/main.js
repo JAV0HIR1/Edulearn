@@ -233,6 +233,23 @@ enrollButtons.forEach(button => {
 });
 
 // ===========================
+// Hero CTA Buttons
+// ===========================
+const heroCTA = document.querySelectorAll('.hero-buttons .btn');
+
+heroCTA.forEach(button => {
+    button.addEventListener('click', (e) => {
+        const buttonText = e.target.textContent.trim();
+
+        if (buttonText.includes('Browse Courses')) {
+            const coursesSection = document.getElementById('courses');
+            coursesSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
+
+// ===========================
 // Newsletter Form
 // ===========================
 const newsletterForm = document.querySelector('.footer-newsletter');
@@ -284,6 +301,24 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(element);
     });
 });
+
+// ===========================
+// Login/Signup Button Handlers
+// ===========================
+const loginBtn = document.querySelector('.nav-buttons .btn-outline');
+const signupBtn = document.querySelector('.nav-buttons .btn-primary');
+
+if (loginBtn) {
+    loginBtn.addEventListener('click', () => {
+        window.location.href = 'login.html';
+    });
+}
+
+if (signupBtn) {
+    signupBtn.addEventListener('click', () => {
+        window.location.href = 'signup.html';
+    });
+}
 
 
 // ===========================
