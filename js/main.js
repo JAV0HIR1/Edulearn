@@ -233,26 +233,6 @@ enrollButtons.forEach(button => {
 });
 
 // ===========================
-// Hero CTA Buttons
-// ===========================
-const heroCTA = document.querySelectorAll('.hero-buttons .btn');
-
-heroCTA.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const buttonText = e.target.textContent.trim();
-        
-        if (buttonText.includes('Get Started') || buttonText.includes('Sign Up')) {
-            // In real application, redirect to signup page
-            alert('This would redirect to the sign-up page.');
-        } else if (buttonText.includes('Browse Courses')) {
-            // Scroll to courses section
-            const coursesSection = document.getElementById('courses');
-            coursesSection.scrollIntoView({ behavior: 'smooth' });
-        }
-    });
-});
-
-// ===========================
 // Newsletter Form
 // ===========================
 const newsletterForm = document.querySelector('.footer-newsletter');
@@ -305,23 +285,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ===========================
-// Login/Signup Button Handlers
-// ===========================
-const loginBtn = document.querySelector('.nav-buttons .btn-outline');
-const signupBtn = document.querySelector('.nav-buttons .btn-primary');
-
-if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
-        alert('This would redirect to the login page.');
-    });
-}
-
-if (signupBtn) {
-    signupBtn.addEventListener('click', () => {
-        alert('This would redirect to the sign-up page.');
-    });
-}
 
 // ===========================
 // Parallax Effect on Hero Section
