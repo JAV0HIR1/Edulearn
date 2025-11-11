@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses | Edulearn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        /* Color Variables */
+        :root {
+            --primary-blue: #007bff; /* Edulearn's main blue */
+            --secondary-white: #ffffff;
+            --accent-light-blue: #e9f2ff;
+            --discount-red: #e74c3c; /* Strong color for discounts */
+            --text-dark: #333;
+            --text-light: #666;
+            --original-price-color: #aaa;
+        }
+
+        /* Basic Reset and Fonts */
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa; /* Very light blue/gray background */
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* === HEADER/NAVBAR === */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 50px;
+            background-color: var(--secondary-white);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo .home-link {
+            font-size: 1.8em;
+            font-weight: 900;
+            color: var(--primary-blue);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-item {
+            margin-left: 25px;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            padding-bottom: 5px;
+            transition: color 0.3s;
+        }
+
+        .nav-item:hover, .nav-item.current {
+            color: var(--primary-blue);
+            border-bottom: 2px solid var(--primary-blue);
+        }
+
+        main {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            color: var(--primary-blue);
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: clamp(1.8em, 4vw, 2.5em);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        /* === PRICING SECTION STYLES === */
+        .pricing-section {
+            padding-bottom: 50px;
+        }
+
+        .price-cards-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Added for responsiveness */
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .price-card {
+            background-color: var(--secondary-white);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            width: clamp(280px, 30%, 350px); /* Responsive width */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            position: relative;
+            border: 1px solid #ddd;
+            overflow: hidden;
+        }
+
+        /* Hover Animation (for price plans) */
+        .price-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .price-card h2 {
+            color: var(--text-dark);
+            font-size: 2em;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+
+        /* --- PRICE DISPLAY --- */
+        .original-price-container {
+            height: 20px; /* Reserve space */
+            margin-bottom: 5px;
+        }
+
+        .original-price {
+            font-size: 1.1em;
+            color: var(--original-price-color);
+            text-decoration: line-through;
+            font-weight: 400;
+        }
+        
+        /* The main displayed price */
+        .price {
+            font-size: 3.2em;
+            font-weight: 900;
+            color: var(--primary-blue);
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .per-month {
+            font-size: 0.3em;
+            color: var(--text-light);
+            font-weight: 400;
+            display: block;
+        }
+
+        /* Discount Label Badge */
+        .discount-label {
+            display: inline-block;
+            background-color: var(--discount-red);
+            color: var(--secondary-white);
+            padding: 5px 15px;
+            border-radius: 5px;
+            margin-bottom: 25px;
+            font-weight: 700;
+            box-shadow: 0 2px 5px rgba(231, 76, 60, 0.5);
+            animation: bounceIn 0.5s ease-out;
+        }
+        
+        /* Always Free Label */
+        .always-free {
+            background-color: #2ecc71; /* Green for free */
+        }
+        
+        /* Override for Free Plan to keep spacing consistent */
+        .free-plan .original-price-container {
+            visibility: hidden; 
+        }
+
+        /* Price List */
+        .price-card ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .price-card li {
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+        }
+
+        .price-card li .icon.check::before {
+            content: '✓'; 
+            color: #28a745;
+            margin-right: 10px;
+            font-weight: 700;
+        }
+        
+        /* Call To Action Button */
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-blue);
+            color: var(--secondary-white);
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: background-color 0.3s, transform 0.1s;
+            width: 80%;
+        }
+
+        .cta-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.03);
+        }
+        
+        /* --- GLOBAL DISCOUNT MESSAGE --- */
+        .global-discount-message {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px 20px;
+            background-color: var(--accent-light-blue);
+            color: var(--primary-blue);
+            border-radius: 8px;
+            border: 1px solid var(--primary-blue);
+            font-size: 1.1em;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .global-discount-message .icon.badge::before {
+            content: '🎓'; /* Graduation cap emoji placeholder */
+            margin-right: 10px;
+            font-size: 1.3em;
+            vertical-align: middle;
+        }
+
+        /* --- KEYFRAMES --- */
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.5); }
+            70% { opacity: 1; transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 123, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+        }
+
+        /* The featured card (Pro) has a gentle pulse */
+        .pro-plan {
+            border: 2px solid var(--primary-blue);
+            box-shadow: 0 0 15px rgba(0, 123, 255, 0.3);
+            animation: pulse 4s infinite;
+        }
+
+
+        /* === COURSE LIST STYLES === */
+        .divider {
+            border: 0;
+            height: 1px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 123, 255, 0.75), rgba(0, 0, 0, 0));
+            margin: 40px 0;
+        }
+
+        .course-section {
+            padding-top: 20px;
+        }
+
+        .course-list-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .course-card {
+            background-color: var(--secondary-white);
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .course-card h3 {
+            color: var(--text-dark);
+            margin-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .course-description {
+            color: var(--text-light);
+            font-size: 0.95em;
+            min-height: 40px;
+        }
+
+        .course-details {
+            margin-top: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .duration, .level {
+            display: inline-block;
+            background-color: var(--accent-light-blue);
+            color: var(--primary-blue);
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+
+        .view-course-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: var(--primary-blue);
+            color: var(--secondary-white);
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+
+        .view-course-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid #ddd;
+            color: var(--text-light);
+            background-color: var(--secondary-white);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+            .price-cards-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .price-card {
+                width: 90%;
+            }
+            .nav-item {
+                margin-left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <a href="index.html" class="home-link">Edulearn</a>
+        </div>
+        <nav>
+            <a href="#" class="nav-item current">Courses</a>
+            <a href="about.html" class="nav-item">About Us</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- === PRICE PLAN SECTION === -->
+        <section id="pricing" class="pricing-section">
+            <h1 class="section-title">Flexible Learning Plans</h1>
+            <p class="subtitle">Choose the plan that fits your educational journey.</p>
+            
+            <div class="price-cards-container">
+                
+                <!-- 1. FREE PLAN CARD -->
+                <div class="price-card free-plan">
+                    <h2>Free Plan</h2>
+                    
+                    <p class="original-price-container">
+                        <!-- Hidden for consistency -->
+                    </p>
+                    <p class="price">$0.00<span class="per-month">/lifetime</span></p>
+                    <p class="discount-label always-free">Always Free Access</p>
+
+                    <ul>
+                        <li><i class="icon check"></i> Access for 1 User</li>
+                        <li><i class="icon check"></i> Limited Core Courses</li>
+                        <li><i class="icon check"></i> Community Forum Support</li>
+                    </ul>
+                    <a href="#" class="cta-button">Start Free</a>
+                </div>
+
+                <!-- 2. PRO PLAN CARD - FEATURED (with Discount) -->
+                <div class="price-card pro-plan">
+                    <h2>Pro Plan</h2>
+                    
+                    <p class="original-price-container">
+                        <span class="original-price">$4.99/mo</span>
+                    </p>
+                    <p class="price">$2.99<span class="per-month">/first month</span></p>
+                    <p class="discount-label special-offer">50% OFF First Month</p>
+                    
+                    <ul>
+                        <li><i class="icon check"></i> Access for 1 User</li>
+                        <li><i class="icon check"></i> Full Course Library</li>
+                        <li><i class="icon check"></i> Certifications Included</li>
+                    </ul>
+                    <a href="#" class="cta-button">Go Pro Now</a>
+                </div>
+
+                <!-- 3. TEAM PLAN CARD (with Discount) -->
+                <div class="price-card team-plan">
+                    <h2>Team Plan</h2>
+                    
+                    <p class="original-price-container">
+                        <span class="original-price">$19.99/mo</span>
+                    </p>
+                    <p class="price">$9.99<span class="per-month">/first month</span></p>
+                    <p class="discount-label special-offer">50% OFF First Month</p>
+                    
+                    <ul>
+                        <li><i class="icon check"></i> Access for up to 5 Users</li>
+                        <li><i class="icon check"></i> Team Progress Tracking</li>
+                        <li><i class="icon check"></i> Dedicated Support</li>
+                    </ul>
+                    <a href="#" class="cta-button">Get Team Access</a>
+                </div>
+            </div>
+
+            <!-- GLOBAL DISCOUNT CALLOUT -->
+            <p class="global-discount-message">
+                <i class="icon badge"></i> **Student Perk:** Students with a valid ID receive a permanent **20% discount** on all monthly plan renewals!
+            </p>
+        </section>
+
+        <hr class="divider">
+
+        <!-- === COURSE LIST SECTION (Same as before) === -->
+        <section id="courses" class="course-section">
+            <h2 class="section-title">Our Course Catalog</h2>
+            <div class="course-list-container">
+                
+                <!-- COURSE ITEM 1 -->
+                <div class="course-card">
+                    <h3>Web Development Fundamentals</h3>
+                    <p class="course-description">Learn HTML, CSS, and JavaScript to build responsive websites from scratch.</p>
+                    <div class="course-details">
+                        <span class="duration">12 Weeks</span>
+                        <span class="level">Beginner</span>
+                    </div>
+                    <a href="#" class="view-course-button">View Details</a>
+                </div>
+
+                <!-- COURSE ITEM 2 -->
+                <div class="course-card">
+                    <h3>Data Science with Python</h3>
+                    <p class="course-description">Master data analysis, visualization, and machine learning using Python.</p>
+                    <div class="course-details">
+                        <span class="duration">16 Weeks</span>
+                        <span class="level">Intermediate</span>
+                    </div>
+                    <a href="#" class="view-course-button">View Details</a>
+                </div>
+
+                <!-- COURSE ITEM 3 -->
+                <div class="course-card">
+                    <h3>Digital Marketing Strategy</h3>
+                    <p class="course-description">Develop effective SEO, social media, and email marketing campaigns.</p>
+                    <div class="course-details">
+                        <span class="duration">8 Weeks</span>
+                        <span class="level">All Levels</span>
+                    </div>
+                    <a href="#" class="view-course-button">View Details</a>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Edulearn. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
