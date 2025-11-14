@@ -15,11 +15,10 @@
                         'primary-blue': '#1e40af', // Deep Blue
                         'secondary-blue': '#bfdbfe', // Light Blue for backgrounds
                         'form-bg': '#f9fafb', // Very light gray for form area
+                        'offer-red': '#dc2626', // Red for emphasis on savings
                     },
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
-                        // Optionally use a serif font for a more 'academic' feel:
-                        // serif: ['Georgia', 'Times New Roman', 'serif'],
                     }
                 }
             }
@@ -40,14 +39,11 @@
             color: #1e40af;
             font-weight: 600;
         }
-        /* Style the input fields for a cleaner look */
-        input[type="text"], input[type="number"], select {
-            transition: all 0.2s;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-        }
-        input[type="text"]:focus, input[type="number"]:focus, select:focus {
-            border-color: #3b82f6; /* Focus ring blue */
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        /* Style for selected plan card */
+        .plan-selected {
+            border-color: #1e40af;
+            box-shadow: 0 0 0 3px #93c5fd;
+            background-color: #eff6ff; /* Very light blue background */
         }
     </style>
 </head>
@@ -57,32 +53,87 @@
 
         <!-- Header: The educational/official look -->
         <header class="bg-primary-blue p-5 sm:p-6 text-white text-center rounded-t-xl">
-            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Financial Transaction Module</h1>
-            <p class="text-sm opacity-90 mt-1">Please confirm the amount and select your preferred method of payment.</p>
+            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Subscription Plan Checkout</h1>
+            <p class="text-sm opacity-90 mt-1">Select your desired plan and duration to proceed with secure payment.</p>
         </header>
 
         <main class="p-4 sm:p-8 md:p-10">
 
-            <!-- 1. Payment Details Form -->
+            <!-- 1. Plan & Duration Selection -->
             <section class="mb-8 border-b pb-6">
                 <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                    Transaction Summary
+                    Choose Your Subscription
                 </h2>
-                <form id="detailsForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Payment Amount (USD)</label>
-                        <input type="number" id="amount" name="amount" value="50.00" step="0.01" required
-                               class="w-full p-3 border border-gray-300 rounded-lg text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Plan Cards -->
+                    <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        
+                        <!-- Pro Plan Card -->
+                        <div id="plan-Pro" data-plan="Pro" class="plan-card p-5 border-2 border-gray-300 rounded-xl cursor-pointer transition duration-200 hover:border-primary-blue plan-selected">
+                            <h3 class="text-xl font-bold text-primary-blue">Pro Plan</h3>
+                            <p class="text-sm text-gray-600 mb-2">For one dedicated user.</p>
+                            <p class="text-3xl font-extrabold text-green-600">
+                                <span id="price-pro-display">$2.99</span>
+                                <span class="text-base font-normal text-gray-500">/mo</span>
+                            </p>
+                            <p class="text-xs text-offer-red mt-1 font-semibold">
+                                50% OFF first month! 
+                                <span class="line-through text-gray-400">$4.99</span> 
+                                <span class="font-normal text-gray-500">(then $4.99/mo)</span>
+                            </p>
+                        </div>
+                        
+                        <!-- Team Plan Card -->
+                        <div id="plan-Team" data-plan="Team" class="plan-card p-5 border-2 border-gray-300 rounded-xl cursor-pointer transition duration-200 hover:border-primary-blue">
+                            <h3 class="text-xl font-bold text-gray-800">Team Plan</h3>
+                            <p class="text-sm text-gray-600 mb-2">For multiple users & collaboration.</p>
+                            <p class="text-3xl font-extrabold text-green-600">
+                                <span id="price-team-display">$9.99</span>
+                                <span class="text-base font-normal text-gray-500">/mo</span>
+                            </p>
+                            <p class="text-xs text-offer-red mt-1 font-semibold">
+                                50% OFF first month! 
+                                <span class="line-through text-gray-400">$19.99</span> 
+                                <span class="font-normal text-gray-500">(then $19.99/mo)</span>
+                            </p>
+                        </div>
                     </div>
-                    <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
-                        <input type="text" id="description" name="description" placeholder="e.g., Spring Semester Fee"
-                               class="w-full p-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                    <!-- Duration Selector and Total Summary -->
+                    <div class="md:col-span-1 p-5 bg-form-bg rounded-xl border border-gray-200 space-y-4">
+                        <div>
+                            <label for="duration" class="block text-sm font-medium text-gray-700 mb-1">Subscription Duration</label>
+                            <select id="duration" name="duration" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-gray-800">
+                                <option value="1">1 Month (Intro Offer)</option>
+                                <option value="2">2 Months</option>
+                                <option value="3">3 Months</option>
+                                <option value="4">4 Months</option>
+                                <option value="5">5 Months</option>
+                                <option value="6">6 Months</option>
+                                <option value="7">7 Months</option>
+                                <option value="8">8 Months</option>
+                                <option value="9">9 Months</option>
+                                <option value="10">10 Months</option>
+                                <option value="11">11 Months</option>
+                                <option value="12">12 Months (Full Year)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="pt-3 border-t">
+                            <p class="text-sm font-medium text-gray-700">Total Due Today</p>
+                            <p class="text-4xl font-extrabold text-primary-blue mt-1">
+                                <span id="final-total">$2.99</span>
+                                <span class="text-xl font-normal text-gray-500">USD</span>
+                            </p>
+                            <p class="text-xs text-gray-500 mt-1" id="total-breakdown">Includes 1 month at $2.99 offer price.</p>
+                        </div>
                     </div>
-                </form>
+                </div>
             </section>
 
             <!-- 2. Payment Method Selector (Tabs) -->
@@ -143,7 +194,8 @@
                     <!-- PayPal Content -->
                     <div id="paypal" class="payment-content hidden p-5 bg-form-bg rounded-lg shadow-inner">
                         <div class="text-center py-4">
-                            <p class="text-gray-700 mb-3">You will be redirected to the secure PayPal gateway to complete your payment of **$2.99**.</p>
+                            <!-- This text will be dynamically updated by JavaScript -->
+                            <p class="text-gray-700 mb-3" id="paypal-text">You will be redirected to the secure PayPal gateway to complete your payment.</p>
                             <img src="https://www.paypalobjects.com/webstatic/mktg/logos/PP_Logo_W.svg" onerror="this.src='https://placehold.co/100x50/1e40af/ffffff?text=PayPal'" alt="PayPal Logo" class="h-6 w-auto mx-auto my-4 bg-primary-blue px-2 rounded-md">
                             <p class="text-sm text-gray-500">Ensure your browser's pop-up blocker is disabled.</p>
                         </div>
@@ -179,7 +231,7 @@
             <section>
                 <button id="submitPayment" type="button"
                     class="w-full bg-green-600 text-white p-4 rounded-xl text-lg font-bold shadow-lg hover:bg-green-700 transition duration-200 transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-green-300">
-                    Process Payment of $50.00
+                    Process Payment of $2.99
                 </button>
 
                 <!-- Custom Message Box for alerts -->
@@ -194,15 +246,28 @@
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const apiKey = ""; // API key is handled by the Canvas environment
 
-        const detailsForm = document.getElementById('detailsForm');
+        // Define Plan Prices (Global Constants)
+        const PRICE_PRO_ORIGINAL = 4.99;
+        const PRICE_PRO_OFFER = 2.99;
+        const PRICE_TEAM_ORIGINAL = 19.99;
+        const PRICE_TEAM_OFFER = 9.99;
+
+        // UI Elements
         const submitButton = document.getElementById('submitPayment');
         const methodContents = document.querySelectorAll('.payment-content');
         const tabButtons = document.querySelectorAll('.tab-button');
         const messageBox = document.getElementById('messageBox');
-        const amountInput = document.getElementById('amount');
         const referenceCodeElement = document.getElementById('referenceCode');
+        const durationSelect = document.getElementById('duration');
+        const planCards = document.querySelectorAll('.plan-card');
+        const finalTotalDisplay = document.getElementById('final-total');
+        const totalBreakdownElement = document.getElementById('total-breakdown');
+        const paypalTextElement = document.getElementById('paypal-text');
 
+        // State
         let currentMethod = 'creditCard';
+        let selectedPlan = 'Pro'; // Default
+        let selectedDuration = 1; // Default
 
         /**
          * Generates a unique, simulated reference code for the Bank Transfer.
@@ -213,18 +278,77 @@
         }
 
         /**
-         * Updates the text on the submit button and the PayPal module based on the input amount.
+         * Calculates the total price based on the selected plan and duration,
+         * applying the first-month discount.
          */
-        function updateDisplayAmount() {
-            const amount = parseFloat(amountInput.value).toFixed(2);
-            submitButton.textContent = `Process Payment of $${amount}`;
+        function calculateTotal() {
+            const duration = parseInt(selectedDuration, 10);
+            let offerPrice, originalPrice, planName;
+
+            if (selectedPlan === 'Pro') {
+                offerPrice = PRICE_PRO_OFFER;
+                originalPrice = PRICE_PRO_ORIGINAL;
+                planName = "Pro";
+            } else { // Team
+                offerPrice = PRICE_TEAM_OFFER;
+                originalPrice = PRICE_TEAM_ORIGINAL;
+                planName = "Team";
+            }
+
+            let total;
+            let breakdownText;
+
+            if (duration === 1) {
+                total = offerPrice;
+                breakdownText = `Includes 1 month of ${planName} at $${offerPrice.toFixed(2)} offer price.`;
+            } else {
+                const remainingMonths = duration - 1;
+                const remainingCost = remainingMonths * originalPrice;
+                total = offerPrice + remainingCost;
+                
+                breakdownText = `Includes 1st month at $${offerPrice.toFixed(2)} (offer) and ${remainingMonths} months at $${originalPrice.toFixed(2)}.`;
+            }
+
+            return { total: total, breakdown: breakdownText };
+        }
+
+        /**
+         * Updates all dynamic UI elements (Total, Button Text, PayPal Text).
+         */
+        function updateDisplay() {
+            const calculation = calculateTotal();
+            const amount = calculation.total.toFixed(2);
             
-            // Update PayPal text
-            const paypalText = document.querySelector('#paypal p:first-child');
-            if (paypalText) {
-                paypalText.innerHTML = `You will be redirected to the secure PayPal gateway to complete your payment of **$${amount}**.`;
+            // 1. Update Final Total Display
+            finalTotalDisplay.textContent = `$${amount}`;
+            totalBreakdownElement.textContent = calculation.breakdown;
+
+            // 2. Update Submit Button Text
+            // Note: selectMethod will handle the specific verb (Process/Continue/Generate)
+            updateSubmitButtonText(amount); 
+            
+            // 3. Update PayPal Content
+            paypalTextElement.innerHTML = `You will be redirected to the secure PayPal gateway to complete your payment of **$${amount}**.`;
+        }
+
+        /**
+         * Updates the text on the submit button based on current method and amount.
+         * @param {string} amount - The calculated total amount.
+         */
+        function updateSubmitButtonText(amount) {
+             switch (currentMethod) {
+                case 'creditCard':
+                    submitButton.textContent = `Process Payment of $${amount}`;
+                    break;
+                case 'paypal':
+                    submitButton.textContent = `Continue to PayPal`;
+                    break;
+                case 'bankTransfer':
+                    submitButton.textContent = `Generate Reference & View Instructions`;
+                    break;
             }
         }
+
 
         /**
          * Displays a custom message in the message box, simulating an alert/success/error.
@@ -261,6 +385,7 @@
          */
         function selectMethod(method) {
             currentMethod = method;
+            const amount = calculateTotal().total.toFixed(2);
 
             // Update tab styles
             tabButtons.forEach(btn => {
@@ -279,39 +404,60 @@
                 }
             });
 
-            // Update button text based on method
+            // Update button text and style based on method
+            submitButton.classList.remove('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300', 'bg-yellow-600', 'hover:bg-yellow-700', 'focus:ring-yellow-300', 'bg-blue-600', 'hover:bg-blue-700', 'focus:ring-blue-300');
+
             switch (method) {
                 case 'creditCard':
-                    submitButton.textContent = `Process Payment of $${parseFloat(amountInput.value).toFixed(2)}`;
-                    submitButton.classList.remove('bg-yellow-600', 'bg-blue-600');
+                    submitButton.textContent = `Process Payment of $${amount}`;
                     submitButton.classList.add('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300');
                     break;
                 case 'paypal':
                     submitButton.textContent = `Continue to PayPal`;
-                    submitButton.classList.remove('bg-green-600', 'bg-blue-600');
                     submitButton.classList.add('bg-yellow-600', 'hover:bg-yellow-700', 'focus:ring-yellow-300');
                     break;
                 case 'bankTransfer':
                     submitButton.textContent = `Generate Reference & View Instructions`;
-                    submitButton.classList.remove('bg-green-600', 'bg-yellow-600');
                     submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'focus:ring-blue-300');
                     break;
             }
         }
 
         /**
+         * Handles the selection of a new plan (Pro or Team).
+         * @param {string} plan - 'Pro' or 'Team'.
+         */
+        function selectPlan(plan) {
+            selectedPlan = plan;
+
+            // Update card styles
+            planCards.forEach(card => {
+                card.classList.remove('plan-selected');
+                card.classList.remove('bg-eff6ff');
+                // Reset colors to default
+                const h3 = card.querySelector('h3');
+                if (h3) h3.classList.remove('text-primary-blue');
+                
+                if (card.dataset.plan === plan) {
+                    card.classList.add('plan-selected');
+                    const selectedH3 = card.querySelector('h3');
+                    if (selectedH3) selectedH3.classList.add('text-primary-blue');
+                } else {
+                    const unselectedH3 = card.querySelector('h3');
+                    if (unselectedH3) unselectedH3.classList.add('text-gray-800');
+                }
+            });
+
+            updateDisplay();
+        }
+
+        /**
          * Simulates the payment submission process.
          */
         async function handleSubmit() {
-            showMessage("Processing payment...", 'info');
+            const amount = calculateTotal().total.toFixed(2);
+            showMessage("Processing plan subscription...", 'info');
             
-            const amount = parseFloat(amountInput.value);
-
-            if (isNaN(amount) || amount <= 0) {
-                showMessage("Please enter a valid amount greater than zero.", 'error');
-                return;
-            }
-
             // Simulate API call delay
             await new Promise(resolve => setTimeout(resolve, 1500));
 
@@ -324,19 +470,18 @@
                         showMessage("Credit Card: Invalid card number format. Must be 16 digits.", 'error');
                         return;
                     }
-                    showMessage(`Success! Card payment of $${amount.toFixed(2)} processed. Reference: ${generateReferenceCode()}`, 'success');
+                    showMessage(`Success! ${selectedPlan} Plan subscribed for ${selectedDuration} months. Total charged: $${amount}.`, 'success');
                     break;
 
                 case 'paypal':
-                    showMessage(`Redirecting to PayPal for $${amount.toFixed(2)}. This is a simulation.`, 'info');
-                    // In a real app, you would redirect the user here.
+                    showMessage(`Redirecting to PayPal for $${amount}. This is a simulation.`, 'info');
                     break;
                 
                 case 'bankTransfer':
                     const code = referenceCodeElement.textContent;
-                    showMessage(`Transfer instructions generated! Use code ${code}. Amount: $${amount.toFixed(2)}.`, 'success');
+                    showMessage(`Transfer instructions generated! Use code ${code} for $${amount}.`, 'success');
                     // Reset button text to reflect completion
-                    submitButton.textContent = `Transfer Instructions Generated`;
+                    updateSubmitButtonText(amount); // Re-run to update text if needed
                     break;
             }
         }
@@ -348,8 +493,19 @@
             // Set initial reference code
             referenceCodeElement.textContent = generateReferenceCode();
 
-            // Initial amount update
-            updateDisplayAmount();
+            // Initial display update
+            updateDisplay();
+
+            // Event listeners for plan cards
+            planCards.forEach(card => {
+                card.addEventListener('click', () => selectPlan(card.dataset.plan));
+            });
+
+            // Event listener for duration change
+            durationSelect.addEventListener('change', (e) => {
+                selectedDuration = parseInt(e.target.value, 10);
+                updateDisplay();
+            });
 
             // Event listener for payment method tabs
             tabButtons.forEach(btn => {
@@ -359,13 +515,9 @@
             // Event listener for main button click
             submitButton.addEventListener('click', handleSubmit);
 
-            // Event listener for amount input changes (live update on button text)
-            amountInput.addEventListener('input', updateDisplayAmount);
-
             // Copy reference code on click
             referenceCodeElement.addEventListener('click', () => {
                 const textToCopy = referenceCodeElement.textContent;
-                // Use document.execCommand('copy') for compatibility in iframes
                 const textArea = document.createElement("textarea");
                 textArea.value = textToCopy;
                 document.body.appendChild(textArea);
