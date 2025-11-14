@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment Submission</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind theme for custom colors and font -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-blue': '#1e40af', // Deep Blue
+                        'secondary-blue': '#bfdbfe', // Light Blue for backgrounds
+                        'form-bg': '#f9fafb', // Very light gray for form area
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        // Optionally use a serif font for a more 'academic' feel:
+                        // serif: ['Georgia', 'Times New Roman', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #93c5fd; /* Light blue */
+            border-radius: 4px;
+        }
+        /* Style for the active payment method tab */
+        .tab-active {
+            border-bottom: 3px solid #1e40af;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        /* Style the input fields for a cleaner look */
+        input[type="text"], input[type="number"], select {
+            transition: all 0.2s;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus {
+            border-color: #3b82f6; /* Focus ring blue */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-secondary-blue min-h-screen p-4 sm:p-8 font-sans flex items-center justify-center">
+
+    <div id="payment-app" class="w-full max-w-4xl bg-white shadow-2xl rounded-xl overflow-hidden transform transition-all duration-300">
+
+        <!-- Header: The educational/official look -->
+        <header class="bg-primary-blue p-5 sm:p-6 text-white text-center rounded-t-xl">
+            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">Financial Transaction Module</h1>
+            <p class="text-sm opacity-90 mt-1">Please confirm the amount and select your preferred method of payment.</p>
+        </header>
+
+        <main class="p-4 sm:p-8 md:p-10">
+
+            <!-- 1. Payment Details Form -->
+            <section class="mb-8 border-b pb-6">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    Transaction Summary
+                </h2>
+                <form id="detailsForm" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Payment Amount (USD)</label>
+                        <input type="number" id="amount" name="amount" value="50.00" step="0.01" required
+                               class="w-full p-3 border border-gray-300 rounded-lg text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description (Optional)</label>
+                        <input type="text" id="description" name="description" placeholder="e.g., Spring Semester Fee"
+                               class="w-full p-3 border border-gray-300 rounded-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </form>
+            </section>
+
+            <!-- 2. Payment Method Selector (Tabs) -->
+            <section class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-700 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-primary-blue" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    Select Payment Method
+                </h2>
+
+                <!-- Tabs -->
+                <div class="flex border-b border-gray-200 mb-6 space-x-2 sm:space-x-4 overflow-x-auto">
+                    <button class="tab-button py-2 px-3 text-sm sm:text-base whitespace-nowrap text-gray-500 hover:text-primary-blue transition duration-150 tab-active" data-method="creditCard">
+                        Credit Card
+                    </button>
+                    <button class="tab-button py-2 px-3 text-sm sm:text-base whitespace-nowrap text-gray-500 hover:text-primary-blue transition duration-150" data-method="paypal">
+                        PayPal
+                    </button>
+                    <button class="tab-button py-2 px-3 text-sm sm:text-base whitespace-nowrap text-gray-500 hover:text-primary-blue transition duration-150" data-method="bankTransfer">
+                        Bank Transfer
+                    </button>
+                </div>
+
+                <!-- Method Content Areas -->
+                <div id="method-content">
+                    
+                    <!-- Credit Card Content (Default Active) -->
+                    <div id="creditCard" class="payment-content p-5 bg-form-bg rounded-lg shadow-inner">
+                        <form id="creditCardForm">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label for="cardNumber" class="block text-xs font-medium text-gray-600 mb-1">Card Number</label>
+                                    <input type="text" id="cardNumber" placeholder="0000 0000 0000 0000" required maxlength="19"
+                                           class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none">
+                                </div>
+                                <div class="grid grid-cols-3 gap-4">
+                                    <div class="col-span-2">
+                                        <label for="expiryDate" class="block text-xs font-medium text-gray-600 mb-1">Expiry (MM/YY)</label>
+                                        <input type="text" id="expiryDate" placeholder="01/25" required maxlength="5"
+                                               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none">
+                                    </div>
+                                    <div>
+                                        <label for="cvc" class="block text-xs font-medium text-gray-600 mb-1">CVC</label>
+                                        <input type="text" id="cvc" placeholder="123" required maxlength="4"
+                                               class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="cardName" class="block text-xs font-medium text-gray-600 mb-1">Name on Card</label>
+                                    <input type="text" id="cardName" placeholder="John Doe" required
+                                           class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- PayPal Content -->
+                    <div id="paypal" class="payment-content hidden p-5 bg-form-bg rounded-lg shadow-inner">
+                        <div class="text-center py-4">
+                            <p class="text-gray-700 mb-3">You will be redirected to the secure PayPal gateway to complete your payment of **$50.00**.</p>
+                            <img src="https://www.paypalobjects.com/webstatic/mktg/logos/PP_Logo_W.svg" onerror="this.src='https://placehold.co/100x50/1e40af/ffffff?text=PayPal'" alt="PayPal Logo" class="h-6 w-auto mx-auto my-4 bg-primary-blue px-2 rounded-md">
+                            <p class="text-sm text-gray-500">Ensure your browser's pop-up blocker is disabled.</p>
+                        </div>
+                    </div>
+
+                    <!-- Bank Transfer Content -->
+                    <div id="bankTransfer" class="payment-content hidden p-5 bg-form-bg rounded-lg shadow-inner">
+                        <div class="space-y-3">
+                            <p class="text-gray-700">Please initiate a transfer using the details below. **Your payment will be processed upon receipt.**</p>
+                            <ul class="text-sm space-y-2 p-3 bg-white border border-gray-200 rounded-lg">
+                                <li class="flex justify-between items-center text-gray-600">
+                                    <span class="font-medium">Account Name:</span>
+                                    <code class="text-primary-blue font-mono">EduTrust Funds</code>
+                                </li>
+                                <li class="flex justify-between items-center text-gray-600">
+                                    <span class="font-medium">Account No.:</span>
+                                    <code class="text-primary-blue font-mono">987654321</code>
+                                </li>
+                                <li class="flex justify-between items-center text-gray-600">
+                                    <span class="font-medium">Reference Code:</span>
+                                    <code id="referenceCode" class="text-primary-blue font-mono cursor-pointer hover:underline">Loading...</code>
+                                </li>
+                            </ul>
+                            <div class="mt-4 p-2 bg-blue-50 border border-blue-200 rounded text-xs text-blue-800">
+                                IMPORTANT: Use the **Reference Code** as the payment description/memo to avoid delays.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Action Button and Message Box -->
+            <section>
+                <button id="submitPayment" type="button"
+                    class="w-full bg-green-600 text-white p-4 rounded-xl text-lg font-bold shadow-lg hover:bg-green-700 transition duration-200 transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-green-300">
+                    Process Payment of $50.00
+                </button>
+
+                <!-- Custom Message Box for alerts -->
+                <div id="messageBox" class="hidden mt-4 p-3 rounded-lg text-center font-medium transition duration-300 ease-in-out"></div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // --- Core Application Logic ---
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const apiKey = ""; // API key is handled by the Canvas environment
+
+        const detailsForm = document.getElementById('detailsForm');
+        const submitButton = document.getElementById('submitPayment');
+        const methodContents = document.querySelectorAll('.payment-content');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const messageBox = document.getElementById('messageBox');
+        const amountInput = document.getElementById('amount');
+        const referenceCodeElement = document.getElementById('referenceCode');
+
+        let currentMethod = 'creditCard';
+
+        /**
+         * Generates a unique, simulated reference code for the Bank Transfer.
+         */
+        function generateReferenceCode() {
+            const randomString = Math.random().toString(36).substring(2, 8).toUpperCase();
+            return `EDU-${randomString}-${new Date().getFullYear().toString().substring(2)}`;
+        }
+
+        /**
+         * Updates the text on the submit button and the PayPal module based on the input amount.
+         */
+        function updateDisplayAmount() {
+            const amount = parseFloat(amountInput.value).toFixed(2);
+            submitButton.textContent = `Process Payment of $${amount}`;
+            
+            // Update PayPal text
+            const paypalText = document.querySelector('#paypal p:first-child');
+            if (paypalText) {
+                paypalText.innerHTML = `You will be redirected to the secure PayPal gateway to complete your payment of **$${amount}**.`;
+            }
+        }
+
+        /**
+         * Displays a custom message in the message box, simulating an alert/success/error.
+         * @param {string} message - The message to display.
+         * @param {string} type - 'success', 'error', or 'info'.
+         */
+        function showMessage(message, type) {
+            messageBox.textContent = message;
+            messageBox.className = 'mt-4 p-3 rounded-lg text-center font-medium transition duration-300 ease-in-out';
+            messageBox.classList.remove('hidden');
+
+            switch (type) {
+                case 'success':
+                    messageBox.classList.add('bg-green-100', 'text-green-800');
+                    break;
+                case 'error':
+                    messageBox.classList.add('bg-red-100', 'text-red-800');
+                    break;
+                case 'info':
+                default:
+                    messageBox.classList.add('bg-blue-100', 'text-blue-800');
+                    break;
+            }
+
+            // Hide after 5 seconds
+            setTimeout(() => {
+                messageBox.classList.add('hidden');
+            }, 5000);
+        }
+
+        /**
+         * Handles the click on a payment method tab.
+         * @param {string} method - The selected payment method key.
+         */
+        function selectMethod(method) {
+            currentMethod = method;
+
+            // Update tab styles
+            tabButtons.forEach(btn => {
+                btn.classList.remove('tab-active');
+                if (btn.dataset.method === method) {
+                    btn.classList.add('tab-active');
+                }
+            });
+
+            // Update content visibility
+            methodContents.forEach(content => {
+                if (content.id === method) {
+                    content.classList.remove('hidden');
+                } else {
+                    content.classList.add('hidden');
+                }
+            });
+
+            // Update button text based on method
+            switch (method) {
+                case 'creditCard':
+                    submitButton.textContent = `Process Payment of $${parseFloat(amountInput.value).toFixed(2)}`;
+                    submitButton.classList.remove('bg-yellow-600', 'bg-blue-600');
+                    submitButton.classList.add('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-300');
+                    break;
+                case 'paypal':
+                    submitButton.textContent = `Continue to PayPal`;
+                    submitButton.classList.remove('bg-green-600', 'bg-blue-600');
+                    submitButton.classList.add('bg-yellow-600', 'hover:bg-yellow-700', 'focus:ring-yellow-300');
+                    break;
+                case 'bankTransfer':
+                    submitButton.textContent = `Generate Reference & View Instructions`;
+                    submitButton.classList.remove('bg-green-600', 'bg-yellow-600');
+                    submitButton.classList.add('bg-blue-600', 'hover:bg-blue-700', 'focus:ring-blue-300');
+                    break;
+            }
+        }
+
+        /**
+         * Simulates the payment submission process.
+         */
+        async function handleSubmit() {
+            showMessage("Processing payment...", 'info');
+            
+            const amount = parseFloat(amountInput.value);
+
+            if (isNaN(amount) || amount <= 0) {
+                showMessage("Please enter a valid amount greater than zero.", 'error');
+                return;
+            }
+
+            // Simulate API call delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            // Logic based on current method
+            switch (currentMethod) {
+                case 'creditCard':
+                    // Basic client-side validation for CC
+                    const cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+                    if (cardNumber.length !== 16 || !/^\d+$/.test(cardNumber)) {
+                        showMessage("Credit Card: Invalid card number format. Must be 16 digits.", 'error');
+                        return;
+                    }
+                    showMessage(`Success! Card payment of $${amount.toFixed(2)} processed. Reference: ${generateReferenceCode()}`, 'success');
+                    break;
+
+                case 'paypal':
+                    showMessage(`Redirecting to PayPal for $${amount.toFixed(2)}. This is a simulation.`, 'info');
+                    // In a real app, you would redirect the user here.
+                    break;
+                
+                case 'bankTransfer':
+                    const code = referenceCodeElement.textContent;
+                    showMessage(`Transfer instructions generated! Use code ${code}. Amount: $${amount.toFixed(2)}.`, 'success');
+                    // Reset button text to reflect completion
+                    submitButton.textContent = `Transfer Instructions Generated`;
+                    break;
+            }
+        }
+
+        /**
+         * Event Listeners and Initialization
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set initial reference code
+            referenceCodeElement.textContent = generateReferenceCode();
+
+            // Initial amount update
+            updateDisplayAmount();
+
+            // Event listener for payment method tabs
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => selectMethod(btn.dataset.method));
+            });
+
+            // Event listener for main button click
+            submitButton.addEventListener('click', handleSubmit);
+
+            // Event listener for amount input changes (live update on button text)
+            amountInput.addEventListener('input', updateDisplayAmount);
+
+            // Copy reference code on click
+            referenceCodeElement.addEventListener('click', () => {
+                const textToCopy = referenceCodeElement.textContent;
+                // Use document.execCommand('copy') for compatibility in iframes
+                const textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showMessage(`Reference code ${textToCopy} copied to clipboard!`, 'info');
+                } catch (err) {
+                    console.error('Oops, unable to copy', err);
+                    showMessage('Failed to copy reference code. Please copy manually.', 'error');
+                }
+                document.body.removeChild(textArea);
+            });
+        });
+    </script>
+</body>
+</html>
