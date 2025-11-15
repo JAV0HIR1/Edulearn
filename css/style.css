@@ -1012,7 +1012,7 @@ section {
    =========================== */
 .scroll-top {
     position: fixed;
-    z-index: 999;
+    z-index: 9999;
     bottom: 2rem;
     right: 2rem;
     width: 50px;
