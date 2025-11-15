@@ -217,20 +217,6 @@ scrollTopBtn.addEventListener('click', () => {
     });
 });
 
-// ===========================
-// Course Enrollment Buttons
-// ===========================
-const enrollButtons = document.querySelectorAll('.btn-course');
-
-enrollButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-        const courseCard = e.target.closest('.course-card');
-        const courseTitle = courseCard.querySelector('.course-title').textContent;
-        
-        // Show enrollment confirmation (in real application, redirect to enrollment page)
-        alert(`You're about to enroll in: ${courseTitle}\n\nThis would typically redirect you to the enrollment page.`);
-    });
-});
 
 // ===========================
 // Hero CTA Buttons
