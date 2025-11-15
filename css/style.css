@@ -1012,7 +1012,7 @@ section {
    =========================== */
 .scroll-top {
     position: fixed;
-    z-index: 9999;
+    z-index: 99999;
     bottom: 2rem;
     right: 2rem;
     width: 50px;
@@ -1027,6 +1027,9 @@ section {
     justify-content: center;
     box-shadow: var(--shadow-lg);
     transition: var(--transition-normal);
+}
+.scroll-top.flex {
+    display: flex;
 }
 
 .scroll-top:hover {
