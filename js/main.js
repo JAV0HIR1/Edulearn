@@ -206,7 +206,7 @@ window.addEventListener('scroll', () => {
     if (window.pageYOffset > 300) {
         scrollTopBtn.classList.add('flex');
     } else {
-        scrollTopBtn.classList.remove('none');
+        scrollTopBtn.classList.remove('flex');
     }
 });
 
