@@ -204,9 +204,9 @@ const scrollTopBtn = document.getElementById('scrollTop');
 
 window.addEventListener('scroll', () => {
     if (window.pageYOffset > 300) {
-        scrollTopBtn.classList.add('show');
+        scrollTopBtn.classList.add('flex');
     } else {
-        scrollTopBtn.classList.remove('show');
+        scrollTopBtn.classList.remove('none');
     }
 });
 
