@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduLearn - All Courses</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>EduLearn</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="courses.html" class="nav-link active">Courses</a></li> 
+                    <li><a href="index.html#about" class="nav-link">About</a></li>
+                    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                </ul>
+                <div class="nav-buttons">
+                    <a href="account.html" class="btn btn-outline">My Account</a>
+                    <a href="index.html" class="btn btn-primary">Sign Out</a> 
+                </div>
+                <div class="hamburger">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="page-header" style="padding-top: 150px; padding-bottom: 80px; text-align: center; background-color: #f8f9fa;">
+        <div class="container">
+            <h1 class="hero-title"><span class="highlight">Explore Our Full Course Catalog</span></h1>
+            <p class="hero-description" style="max-width: 700px; margin: 0 auto; color: #555;">
+                Browse over 1,000 expertly designed courses and start mastering new skills today.
+            </p>
+        </div>
+    </section>
+
+    <section id="all-courses" class="courses" style="padding-top: 50px;">
+        <div class="container">
+            <div class="course-controls" style="margin-bottom: 30px; display: flex; justify-content: space-between;">
+                <input type="text" placeholder="Search Courses..." style="padding: 10px; border: 1px solid #ccc; border-radius: 5px; flex-grow: 1; margin-right: 20px;">
+                <select style="padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <option>Sort by Popularity</option>
+                    <option>Sort by Price</option>
+                    <option>Sort by Rating</option>
+                </select>
+            </div>
+
+            <div class="course-grid">
+                
+                <div class="course-card" data-category="technology">
+                    <div class="course-image">
+                        <i class="fas fa-code course-icon"></i>
+                        <div class="course-badge">Bestseller</div>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">
+                            <span class="course-category"><i class="fas fa-tag"></i> Technology</span>
+                            <span class="course-rating"><i class="fas fa-star"></i> 4.8</span>
+                        </div>
+                        <h3 class="course-title">Complete Web Development Bootcamp</h3>
+                        <p class="course-description">Master HTML, CSS, JavaScript, React, and Node.js to become a full-stack developer</p>
+                        <div class="course-footer">
+                            <div class="course-info">
+                                <span><i class="fas fa-users"></i> 12,543 students</span>
+                                <span><i class="fas fa-clock"></i> 40 hours</span>
+                            </div>
+                            <button class="btn btn-course" onclick="window.location.href='course-detail.html'">View Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="course-card" data-category="design">
+                    <div class="course-image">
+                        <i class="fas fa-paint-brush course-icon"></i>
+                        <div class="course-badge badge-new">New</div>
+                    </div>
+                    <div class="course-content">
+                        <div class="course-meta">
+                            <span class="course-category"><i class="fas fa-tag"></i> Design</span>
+                            <span class="course-rating"><i class="fas fa-star"></i> 4.9</span>
+                        </div>
+                        <h3 class="course-title">UI/UX Design Masterclass</h3>
+                        <p class="course-description">Learn user interface and experience design with Figma and Adobe XD</p>
+                        <div class="course-footer">
+                            <div class="course-info">
+                                <span><i class="fas fa-users"></i> 8,932 students</span>
+                                <span><i class="fas fa-clock"></i> 30 hours</span>
+                            </div>
+                            <button class="btn btn-course" onclick="window.location.href='course-detail-2.html'">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                
+                </div>
+
+            <div class="section-cta" style="margin-top: 40px;">
+                <button class="btn btn-outline btn-lg">Load More Courses</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        </footer>
+
+    <button id="scrollTop" class="scroll-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
